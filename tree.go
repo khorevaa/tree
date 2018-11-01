@@ -1,25 +1,28 @@
 package tree
 
+// Tree represent a tree structure and holds a reference to the root
 type Tree struct {
 	Root *Node
 }
 
+// Node is the data structure which the tree is consists of
 type Node struct {
 	Value    interface{}
 	Parent   *Node
 	Children []*Node
 }
 
+// Create returns a new empty tree
 func Create() *Tree {
 	root := Node{nil, nil, []*Node{}}
 	return &Tree{&root}
 }
 
+// Size returns the number of nodes in the tree, the root excluded
 func (tree *Tree) Size() int {
 	if len(tree.Root.Children) == 0 {
 		return 0
 	}
-
 	return recSize(tree.Root) - 1
 }
 
