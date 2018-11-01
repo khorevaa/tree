@@ -32,3 +32,17 @@ func TestRemove(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestHasChildren(t *testing.T) {
+	// Arange
+	tree := tree.Create()
+
+	if tree.Root.HasChildren() {
+		t.Fail()
+	}
+
+	tree.Root.Add(1)
+	if !tree.Root.HasChildren() {
+		t.Fail()
+	}
+}

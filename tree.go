@@ -73,3 +73,8 @@ func (node *Node) Remove() {
 		}
 	}
 }
+
+// HasChildren returns true if node has any child nodes
+func (node *Node) HasChildren() bool {
+	return len(node.Children) != 0
+}
