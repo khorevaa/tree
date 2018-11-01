@@ -1,5 +1,10 @@
 package tree
 
+import (
+	"fmt"
+	"strings"
+)
+
 // Tree represent a tree structure and holds a reference to the root
 type Tree struct {
 	Root *Node
@@ -44,11 +49,24 @@ func (tree *Tree) String() string {
 		return ""
 	}
 
-	return stringRec(tree.Root)
+	fmt.Println("Root")
+	var builder strings.Builder
+	recString(tree.Root, 0, &builder)
+	return strings.TrimRight(builder.String(), "\n")
 }
 
-func stringRec(node *Node) string {
-	return ""
+func recString(node *Node, nbrIndents int, b *strings.Builder) {
+	indent := strings.Repeat("\t", nbrIndents)
+	if !node.HasChildren() {
+		fmt.Fprintf(b, "%s%v\n", indent, node)
+	} else {
+		if node.Value != nil {
+			fmt.Fprintf(b, "%s%v\n", indent, node)
+		}
+		for _, child := range node.Children {
+			recString(child, nbrIndents+1, b)
+		}
+	}
 }
 
 // Add adds a new node under the receiving node with the specified value
@@ -80,4 +98,8 @@ func (node *Node) Remove() {
 // HasChildren returns true if node has any child nodes
 func (node *Node) HasChildren() bool {
 	return len(node.Children) != 0
+}
+
+func (node *Node) String() string {
+	return fmt.Sprint(node.Value)
 }
