@@ -12,7 +12,7 @@ type Tree struct {
 
 // Node is the data structure which the tree is consists of
 type Node struct {
-	Value    interface{}
+	Value    fmt.Stringer
 	Parent   *Node
 	Children []*Node
 }
@@ -70,7 +70,7 @@ func recString(node *Node, nbrIndents int, b *strings.Builder) {
 }
 
 // Add adds a new node under the receiving node with the specified value
-func (node *Node) Add(value interface{}) *Node {
+func (node *Node) Add(value fmt.Stringer) *Node {
 	// TODO: Check for nil value and return an error?
 
 	new := &Node{value, node, []*Node{}}
