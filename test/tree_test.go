@@ -1,6 +1,7 @@
 package test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/lunjon/tree"
@@ -57,6 +58,23 @@ func TestSize(t *testing.T) {
 	size = tree.Size()
 	if size != 1 {
 		t.Log(size)
+		t.Fail()
+	}
+}
+
+func TestString(t *testing.T) {
+	// Arange
+	tree := tree.Create()
+
+	// Act
+	n1 := tree.Root.Add(1)
+	tree.Root.Add(2)
+	n1.Add(3)
+
+	// Assert
+	str := fmt.Sprint(tree)
+
+	if str == "" {
 		t.Fail()
 	}
 }
