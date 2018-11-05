@@ -3,18 +3,23 @@ package tree
 import (
 	"fmt"
 	"strings"
-
-	"github.com/lunjon/tree/internal/node"
 )
 
 // Tree represent a tree structure and holds a reference to the root
 type Tree struct {
-	Root *node.Node
+	Root *Node
+}
+
+// Node is the data structure which the tree is consists of
+type Node struct {
+	Value    interface{}
+	Parent   *Node
+	Children []*Node
 }
 
 // Create returns a new empty tree
 func Create() *Tree {
-	root := node.Node{Value: nil, Parent: nil, Children: []*node.Node{}}
+	root := Node{Value: nil, Parent: nil, Children: []*Node{}}
 	return &Tree{&root}
 }
 
@@ -26,7 +31,7 @@ func (tree *Tree) Size() int {
 	return recSize(tree.Root) - 1
 }
 
-func recSize(node *node.Node) int {
+func recSize(node *Node) int {
 	if len(node.Children) == 0 {
 		return 1
 	}
@@ -51,7 +56,7 @@ func (tree *Tree) String() string {
 	return strings.TrimRight(builder.String(), "\n")
 }
 
-func recString(node *node.Node, nbrIndents int, b *strings.Builder) {
+func recString(node *Node, nbrIndents int, b *strings.Builder) {
 	indent := strings.Repeat("\t", nbrIndents)
 	if !node.HasChildren() {
 		fmt.Fprintf(b, "%s%v\n", indent, node)
@@ -63,4 +68,39 @@ func recString(node *node.Node, nbrIndents int, b *strings.Builder) {
 			recString(child, nbrIndents+1, b)
 		}
 	}
+}
+
+// Add adds a new node under the receiving node with the specified value
+func (node *Node) Add(value interface{}) *Node {
+	// TODO: Check for nil value and return an error?
+
+	new := &Node{value, node, []*Node{}}
+	node.Children = append(node.Children, new)
+	return new
+}
+
+// Remove deletes this node from the tree and all its descdendants
+func (node *Node) Remove() {
+	// Check if it's the root
+	if node.Parent == nil {
+		return // Do nothing
+	}
+
+	// Remove this node from its parent
+	parent := node.Parent
+	for i, child := range parent.Children {
+		if child == node {
+			parent.Children = append(parent.Children[:i], parent.Children[i+1:]...)
+			break
+		}
+	}
+}
+
+// HasChildren returns true if node has any child nodes
+func (node *Node) HasChildren() bool {
+	return len(node.Children) != 0
+}
+
+func (node *Node) String() string {
+	return fmt.Sprint(node.Value)
 }

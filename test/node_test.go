@@ -1,12 +1,14 @@
-package node
+package test
 
 import (
 	"testing"
+
+	"github.com/lunjon/tree"
 )
 
 func TestAdd(t *testing.T) {
 	// Arange
-	root := Node{Value: nil, Parent: nil, Children: []*Node{}}
+	root := tree.Node{Value: nil, Parent: nil, Children: []*tree.Node{}}
 
 	// Act
 	val := "val"
@@ -19,7 +21,7 @@ func TestAdd(t *testing.T) {
 
 func TestRemove(t *testing.T) {
 	// Arange
-	root := Node{Value: nil, Parent: nil, Children: []*Node{}}
+	root := tree.Node{Value: nil, Parent: nil, Children: []*tree.Node{}}
 	node := root.Add(1)
 
 	// Act
@@ -33,7 +35,7 @@ func TestRemove(t *testing.T) {
 
 func TestHasChildren(t *testing.T) {
 	// Arange
-	root := Node{Value: nil, Parent: nil, Children: []*Node{}}
+	root := tree.Node{Value: nil, Parent: nil, Children: []*tree.Node{}}
 
 	if root.HasChildren() {
 		t.Fail()
