@@ -12,17 +12,17 @@ type Tree struct {
 }
 
 // Create returns a new empty tree
-func Create() *Tree {
-	root := Node{Value: ".", Parent: nil, Children: []*Node{}}
+func Create(value interface{}) *Tree {
+	root := Node{Value: value, Parent: nil, Children: []*Node{}}
 	return &Tree{&root}
 }
 
 // Size returns the number of nodes in the tree, the root excluded
 func (tree *Tree) Size() int {
-	if len(tree.Root.Children) == 0 {
-		return 0
+	if !tree.Root.HasChildren() {
+		return 1
 	}
-	return recSize(tree.Root) - 1
+	return recSize(tree.Root)
 }
 
 func recSize(node *Node) int {
@@ -38,16 +38,33 @@ func recSize(node *Node) int {
 	return sum
 }
 
+// ForEachBSF iterates over this tree using breadth first
+// search and calls callback for each node
+func (tree *Tree) ForEachBSF(callback func(*Node)) {
+	if !tree.Root.HasChildren() {
+		callback(tree.Root)
+	}
+
+	recForEachBSF(tree.Root, callback)
+}
+
+func recForEachBSF(node *Node, callback func(*Node)) {
+	callback(node)
+	for i := range node.Children {
+		recForEachBSF(node.Children[i], callback)
+	}
+}
+
 // Implement the fmt.Stringer interface
 func (tree *Tree) String() string {
-	if len(tree.Root.Children) == 0 {
+	if !tree.Root.HasChildren() {
 		return ""
 	}
 
 	var builder strings.Builder
 	var levelsEnded []int
 
-	fmt.Println(".")
+	fmt.Println(tree.Root)
 	printNodes(&builder, 0, levelsEnded, tree.Root.Children)
 	return builder.String()
 }
