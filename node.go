@@ -1,6 +1,8 @@
 package tree
 
-import "fmt"
+import (
+	"fmt"
+)
 
 // Node is the data structure which the tree is consists of
 type Node struct {
@@ -18,7 +20,7 @@ func (node *Node) Add(value interface{}) *Node {
 	return new
 }
 
-// Remove deletes this node from the tree and all its descdendants
+// Remove this node from the tree and all its descdendants
 func (node *Node) Remove() {
 	// Check if it's the root
 	if node.Parent == nil {
@@ -32,6 +34,26 @@ func (node *Node) Remove() {
 			parent.Children = append(parent.Children[:i], parent.Children[i+1:]...)
 			break
 		}
+	}
+}
+
+// ForEachDFS runs callback for each node using depth-first-search
+func (node *Node) ForEachDFS(callback func(*Node)) {
+	if !node.HasChildren() {
+		callback(node)
+	} else {
+		recForEachDFS(node, callback)
+	}
+}
+
+func recForEachDFS(node *Node, callback func(*Node)) {
+	if !node.HasChildren() {
+		callback(node)
+	} else {
+		for _, n := range node.Children {
+			recForEachDFS(n, callback)
+		}
+		callback(node)
 	}
 }
 

@@ -1,6 +1,7 @@
 package test
 
 import (
+	"log"
 	"testing"
 
 	"github.com/lunjon/tree"
@@ -43,6 +44,32 @@ func TestHasChildren(t *testing.T) {
 
 	root.Add(1)
 	if !root.HasChildren() {
+		t.Fail()
+	}
+}
+
+func TestForEachDSF(t *testing.T) {
+	root := tree.Node{Value: 0, Parent: nil, Children: []*tree.Node{}}
+	one := root.Add(1)
+	two := one.Add(2)
+	two.Add(3)
+
+	values := make([]int, 0)
+	callback := func(node *tree.Node) {
+		values = append(values, node.Value.(int))
+	}
+
+	root.ForEachDFS(callback)
+
+	if len(values) != 4 {
+		log.Printf("len == %d", len(values))
+		t.Fail()
+	}
+
+	if values[0] != 3 {
+		t.Fail()
+	}
+	if values[1] != 2 {
 		t.Fail()
 	}
 }
