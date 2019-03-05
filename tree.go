@@ -64,7 +64,7 @@ func (tree *Tree) String() string {
 	var builder strings.Builder
 	var levelsEnded []int
 
-	fmt.Println(tree.Root)
+	fmt.Fprintln(&builder, tree.Root)
 	printNodes(&builder, 0, levelsEnded, tree.Root.Children)
 	return builder.String()
 }
