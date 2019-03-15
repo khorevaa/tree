@@ -1,0 +1,17 @@
+language: go
+
+go:
+- 1.11.x
+
+jobs:
+  include:
+    - stage: build
+      script:
+        - go get ./...
+        - go test -v ./...
+      deploy:
+        provider: releases
+        api_key: $GH_TOKEN
+        on:
+          branch: master
+          tags: true
